@@ -2,44 +2,55 @@ from enum import (
     auto,
     Enum,
     unique,
+    
+)
+from typing import (
+    NamedTuple,
     Dict
 )
-from typing import NamedTuple
-
 
 @unique
 class TokenType(Enum):
-    # Tipos de tokens
-    ASSING=auto()#
+    ASSING=auto()
     COMMA=auto()
+    DIVISION=auto()
+    EQ=auto()
     EOF=auto()
+    FOR=auto()
     FUNCTION=auto()
+    GT=auto()
+    GTE=auto()
     IDENT=auto()
-    ILLEGAL=auto()#
+    ILLEGAL=auto()
     INT=auto()
-    LBRACE=auto()#
+    LBRACE=auto()
     LET=auto()
-    LPAREN=auto()#
-    MINUS=auto()#
-    PLUS=auto()#
-    RBRACE=auto()#
-    RPAREN=auto()#
-    SEMICOLON=auto()#
+    LPAREN=auto()
+    LT=auto()
+    LTE=auto()
+    NEGATION=auto()
+    MINUS=auto()
+    MULTIPLICATION=auto()
+    NEQ=auto()
+    PLUS=auto()
+    RBRACE=auto()
+    RPAREN=auto()
+    SEMICOLON=auto()
 
 
 
 class Token(NamedTuple):
-    token_type: TokenType
+    token_type:TokenType
     literal:str
-
     def __str__(self) -> str:
-        return f'Type {self.token_type}, literal {self.literal}'
+        return f'Type {self.token_type}, Literal {self.literal}'
     
-    def lookup_token_type(literal:str) -> TokenType:
-        # Palabras reservadas
-        keywords:Dict[str,TokenType]={
-            'variable':TokenType.LET,
-            'function':TokenType.FUNCTION
-        }
-        return keywords.get(literal,TokenType.IDENT)
-    
+
+
+def lookup_token_type(literal:str)->TokenType:
+    keywords:Dict[str,TokenType]={
+        'variable':TokenType.LET,
+        'funcion':TokenType.FUNCTION,
+        'para':TokenType.FOR
+    }
+    return keywords.get(literal,TokenType.IDENT)
