@@ -13,7 +13,6 @@ class Lexer:
         self._read_position:int=0
         self._read_character()
         
-
     def next_token(self)->Token:
         self._skip_whitespace()
         if match(r'^=$', self._character):
@@ -66,17 +65,20 @@ class Lexer:
         return bool(match(r'^[a-z-A-Z]',character))
     
     def _is_number(self,character:str)->bool:
-        return bool(match('^\d$', character ))
         #return bool(match('^[0-9]$', character ))
+        return bool(match('^\d$', character ))
+    
     def _make_two_character_token(self, token_type: TokenType) -> Token:
         prefix = self._character
         self._read_character()
         suffix = self._character
         return Token(token_type, f'{prefix}{suffix}')
+    
     def _peek_character(self) -> str:
         if self._read_position >= len(self._source):
             return ''
         return self._source[self._read_position]
+    
     def _read_character(self)->None:
         if self._read_position>=len(self._source):
             self._character=''
@@ -96,7 +98,7 @@ class Lexer:
         while self._is_number(self._character):
             self._read_character()
         return self._source[initial_position:self._position]
+    
     def _skip_whitespace(self)->None:
         while match(r'^\s$',self._character):
             self._read_character()
-
