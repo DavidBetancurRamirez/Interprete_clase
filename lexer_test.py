@@ -27,4 +27,4 @@ class LexerTest(TestCase):
             Token(TokenType.NEGATION, '!'),
         ]
 
-        self.assertEquals(tokens, expected_tokens)
+        self.assertEqual(tokens, expected_tokens)
