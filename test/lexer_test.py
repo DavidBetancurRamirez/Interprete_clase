@@ -1,6 +1,5 @@
 from unittest import TestCase
 from typing import List
-
 from lpp.tokens import (
     Token,
     TokenType
