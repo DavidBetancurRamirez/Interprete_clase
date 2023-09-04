@@ -1,20 +1,62 @@
+from enum import IntEnum
 from typing import (
     Optional,
-    List
+    List,
+    Callable,
+    Dict
 )
 from lpp.ast import (
-    Expression,
     Identifier,
     LetStatement,
-    ReturnStatements,
     Statement,
-    Program
+    Expression,
+    Program,
+    ReturnStatements,
+    Call,
+    ExpressionStatement,
+    Function,
+    If,
+    Infix,
+    Integer,
+    Prefix,
+    Block,
+    Boolean
 )
 from lpp.tokens import (
     Token,
     TokenType
 )
 from lpp.lexer import Lexer
+
+
+PrefixParseFn=Callable[[],Optional[Expression]]
+InfixParseFn = Callable[[Expression],Optional[Expression]]
+PrefixParseFns=Dict[TokenType,PrefixParseFn]
+InfixParseFns=Dict[TokenType,InfixParseFn]
+
+class Precedence(IntEnum):
+    LOWEST=1
+    EQUAL=2
+    LESSGREATER=3
+    SUM=4
+    PRODUCT=5
+    POW=6
+    PREFIX=7
+    CALL=8
+
+PRECEDENCES:Dict[TokenType,Precedence]={
+    TokenType.EQ:Precedence.EQUAL,
+    TokenType.LTE:Precedence.LESSGREATER,
+    TokenType.LT:Precedence.LESSGREATER,
+    TokenType.GT:Precedence.LESSGREATER,
+    TokenType.GTE:Precedence.LESSGREATER,
+    TokenType.PLUS:Precedence.SUM,
+    TokenType.MINUS:Precedence.SUM,
+    TokenType.DIVISION:Precedence.PRODUCT,
+    TokenType.MULTIPLICATION:Precedence.PRODUCT,
+    TokenType.LPAREN: Precedence.CALL,
+    TokenType.DIF:Precedence.EQUAL
+}
 
 class Parser:
     def __init__(self, lexer:Lexer) -> None:
@@ -87,5 +129,38 @@ class Parser:
         elif self._current_token.token_type==TokenType.RETURN:
             return self._parse_return_statement()
         else:
-            None
+            return None
             
+    def _parse_boolean(self)->Boolean:
+        assert self._current_token is not None
+
+        return Boolean(token=self._current_token,
+                       value=self._current_token.token_type==TokenType.TRUE)
+
+    def _parse_integer(self)->Optional[Integer]:
+        assert self._current_token is not None
+        integer=Integer(token=self._current_token)
+
+        try:
+            integer.value=int(self._current_token.literal)
+        except ValueError:
+            message:str=f'Error al parsear {self._current_token.literal}'
+            self.errors.append(message)
+            return None
+
+        return integer
+    def _parse_block(self)->Block:
+        assert self._current_token is not None
+        block_statement=Block(token=self._current_token,statements=[])
+
+        self._advance_tokens()
+
+        while  self._current_token.token_type!=TokenType.RBRACE \
+            and self._current_token.token_type!=TokenType.EOF:
+            statement=self._parse_statement()
+            if statement:
+                block_statement.statements.append(statement)
+
+            self._advance_tokens()
+
+        return block_statement
