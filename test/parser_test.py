@@ -10,6 +10,7 @@ from typing import(
     List
 )
 
+
 class ParserTest(TestCase):
     def test_parse_program(self) -> None:
         source:str="variable x=5;"
@@ -28,7 +29,7 @@ class ParserTest(TestCase):
         lexer:Lexer=Lexer(source)
         parser:Parser=Parser(lexer)
         program:Program=parser.parse_program()
-        self.assert_Equal(len(program.statements),3)
+        self.assertEqual(len(program.statements),3)
         for statement in program.statements:
             self.assertEqual(statement.token_literal(),'variable')
     
@@ -66,3 +67,4 @@ class ParserTest(TestCase):
         parser:Parser=Parser(lexer)
         program:Program=parser.parse_program()
         self.assertEqual(len(program.statements),2)
+        

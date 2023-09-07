@@ -16,7 +16,7 @@ class LexerTest(TestCase):
             tokens.append(lexer.next_token())
 
         expected_tokens: List[Token] = [
-            Token(TokenType.ASSING, '='),
+            Token(TokenType.ASSIGN, '='),
             Token(TokenType.PLUS, '+'),
             Token(TokenType.MINUS, '-'),
             Token(TokenType.DIVISION, '/'),
@@ -27,3 +27,4 @@ class LexerTest(TestCase):
         ]
 
         self.assertEqual(tokens, expected_tokens)
+        

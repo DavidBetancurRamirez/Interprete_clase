@@ -9,16 +9,15 @@ from typing import (
     Dict
 )
 
-
 @unique
 class TokenType(Enum):
-    ASSING=auto()
+    ASSIGN=auto()
     COMMA=auto()
     DIF=auto()
     DIVISION=auto()
-    EQ=auto()
     ELSE=auto()
     ELSEIF=auto()
+    EQ=auto()
     EOF=auto()
     FALSE=auto()
     FOR=auto()
@@ -26,17 +25,17 @@ class TokenType(Enum):
     GT=auto()
     GTE=auto()
     IDENT=auto()
-    ILLEGAL=auto()
     IF=auto()
+    ILLEGAL=auto()
     INT=auto()
     LBRACE=auto()
     LET=auto()
     LPAREN=auto()
     LT=auto()
     LTE=auto()
-    NEGATION=auto()
     MINUS=auto()
     MULTIPLICATION=auto()
+    NEGATION=auto()
     NEQ=auto()
     PLUS=auto()
     RBRACE=auto()
@@ -45,12 +44,14 @@ class TokenType(Enum):
     SEMICOLON=auto()
     TRUE=auto()
 
+
 class Token(NamedTuple):
     token_type:TokenType
     literal:str
     def __str__(self) -> str:
         return f'Type {self.token_type}, Literal {self.literal}'
     
+
 def lookup_token_type(literal:str)->TokenType:
     keywords:Dict[str,TokenType]={
         'variable':TokenType.LET,
@@ -64,3 +65,4 @@ def lookup_token_type(literal:str)->TokenType:
         'falso':TokenType.FALSE
     }
     return keywords.get(literal,TokenType.IDENT)
+    

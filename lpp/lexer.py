@@ -13,13 +13,14 @@ class Lexer:
         self._read_position:int=0
         self._read_character()
         
+
     def next_token(self)->Token:
         self._skip_whitespace()
         if match(r'^=$', self._character):
             if self._peek_character() == '=':
                 token = self._make_two_character_token(TokenType.EQ)
             else:
-                token = Token(TokenType.ASSING, self._character)
+                token = Token(TokenType.ASSIGN, self._character)
         elif match(r'^,$',self._character):
             token=Token(TokenType.COMMA,self._character)
         elif match(r'^;$',self._character):
@@ -65,9 +66,9 @@ class Lexer:
         return bool(match(r'^[a-z-A-Z]',character))
     
     def _is_number(self,character:str)->bool:
-        #return bool(match('^[0-9]$', character ))
         return bool(match('^\d$', character ))
-    
+        #return bool(match('^[0-9]$', character ))
+
     def _make_two_character_token(self, token_type: TokenType) -> Token:
         prefix = self._character
         self._read_character()
@@ -92,7 +93,7 @@ class Lexer:
         while self._is_letter(self._character):
             self._read_character()
         return self._source[initial_position:self._position]
-        
+    
     def _read_number(self)->str:
         initial_position=self._position
         while self._is_number(self._character):
