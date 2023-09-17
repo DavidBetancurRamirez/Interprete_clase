@@ -3,12 +3,6 @@ from lpp.ast import Program
 from lpp.evaluator import evaluate
 from lpp.lexer import Lexer
 from lpp.parser import Parser
-from lpp.tokens import (
-    Token,
-    TokenType,
-)
-
-EOF_TOKEN: Token = Token(TokenType.EOF, '')
 
 
 def _print_parse_errors(errors: List[str]):
