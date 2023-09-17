@@ -6,21 +6,21 @@ from typing import (
     Dict
 )
 from lpp.ast import (
-    Identifier,
-    LetStatement,
-    Statement,
-    Expression,
-    Program,
-    ReturnStatements,
+    Block,
+    Boolean,
     Call,
+    Identifier,
+    Expression,
     ExpressionStatement,
     Function,
     If,
     Infix,
     Integer,
+    LetStatement,
     Prefix,
-    Block,
-    Boolean
+    Program,
+    ReturnStatements,
+    Statement,
 )
 from lpp.tokens import(
     Token,
@@ -239,7 +239,6 @@ class Parser:
         function.body = self._parse_block()
 
         return function
-
 
     def _parse_function_parameters(self) -> List[Identifier]:
         params: List[Identifier] = []
