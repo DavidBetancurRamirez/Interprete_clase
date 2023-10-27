@@ -4,7 +4,7 @@ from lpp.ast import (
     Identifier,
     LetStatement,
     Program,
-    ReturnStatements,
+    ReturnStatement,
 )
 from lpp.tokens import (
     Token,
@@ -35,7 +35,7 @@ class ASTTest(TestCase):
 
     def test_return_statement(self) -> None:
         program: Program = Program(statements=[
-            ReturnStatements(
+            ReturnStatement(
                 token=Token(TokenType.RETURN, literal='regresa'),
                 return_value=Identifier(
                     token=Token(TokenType.IDENT, literal='mi_var'),
