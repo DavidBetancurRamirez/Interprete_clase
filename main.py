@@ -1,4 +1,5 @@
 from lpp.repl import start_repl
+
 def imprimir_bienvenida():
     bienvenida = [
         "  ***     * *    ***    * *      *** ",
@@ -9,10 +10,11 @@ def imprimir_bienvenida():
         "  ***    *   *   ***   *   *     *** "
     ]
     for linea in bienvenida:
-        print(linea)
+        print(linea.center(40, "*"))
 
 def main()->None:
     imprimir_bienvenida()
     start_repl()
+    
 if __name__=='__main__':
     main()
