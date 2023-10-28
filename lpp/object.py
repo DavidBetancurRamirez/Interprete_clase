@@ -10,7 +10,6 @@ from enum import (
 from typing import (
     Dict,
     List,
-    Optional,
 )
 from typing_extensions import Protocol
 from lpp.ast import (

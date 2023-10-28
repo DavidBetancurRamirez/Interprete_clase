@@ -36,33 +36,39 @@ def evaluate(node: ast.ASTNode, env: Environment) -> Optional[Object]:
     node_type: Type = type(node)
 
     if node_type == ast.Program:
+
         node = cast(ast.Program, node)
-
         return _evaluate_program(node, env)
+    
     elif node_type == ast.ExpressionStatement:
-        node = cast(ast.ExpressionStatement, node)
 
+        node = cast(ast.ExpressionStatement, node)
         assert node.expression is not None
         return evaluate(node.expression, env)
+    
     elif node_type == ast.Integer:
-        node = cast(ast.Integer, node)
 
+        node = cast(ast.Integer, node)
         assert node.value is not None
         return Integer(node.value)
+    
     elif node_type == ast.Boolean:
-        node = cast(ast.Boolean, node)
 
+        node = cast(ast.Boolean, node)
         assert node.value is not None
         return _to_boolean_object(node.value)
+    
     elif node_type == ast.Prefix:
-        node = cast(ast.Prefix, node)
 
+        node = cast(ast.Prefix, node)
         assert node.right is not None
         right = evaluate(node.right, env)
 
         assert right is not None
         return _evaluate_prefix_expression(node.operator, right)
+    
     elif node_type == ast.Infix:
+
         node = cast(ast.Infix, node)
 
         assert node.left is not None and node.right is not None
@@ -71,15 +77,19 @@ def evaluate(node: ast.ASTNode, env: Environment) -> Optional[Object]:
 
         assert right is not None and left is not None
         return _evaluate_infix_expression(node.operator, left, right)
+    
     elif node_type == ast.Block:
+
         node = cast(ast.Block, node)
-
         return _evaluate_block_statement(node, env)
+    
     elif node_type == ast.If:
-        node = cast(ast.If, node)
 
+        node = cast(ast.If, node)
         return _evaluate_if_expression(node, env)
+    
     elif node_type == ast.ReturnStatement:
+
         node = cast(ast.ReturnStatement, node)
 
         assert node.return_value is not None
@@ -87,7 +97,9 @@ def evaluate(node: ast.ASTNode, env: Environment) -> Optional[Object]:
 
         assert value is not None
         return Return(value)
+    
     elif node_type == ast.LetStatement:
+
         node = cast(ast.LetStatement, node)
 
         assert node.value is not None
@@ -95,18 +107,22 @@ def evaluate(node: ast.ASTNode, env: Environment) -> Optional[Object]:
 
         assert node.name is not None
         env[node.name.value] = value
+
     elif node_type == ast.Identifier:
+
         node = cast(ast.Identifier, node)
 
         return _evaluate_identifier(node, env)
+    
     elif node_type == ast.Function:
+
         node = cast(ast.Function, node)
 
         assert node.body is not None
-        return Function(node.parameters,
-                        node.body,
-                        env)
+        return Function(node.parameters, node.body, env)
+    
     elif node_type == ast.Call:
+
         node = cast(ast.Call, node)
 
         function = evaluate(node.function, env)
@@ -116,10 +132,12 @@ def evaluate(node: ast.ASTNode, env: Environment) -> Optional[Object]:
 
         assert function is not None
         return _apply_function(function, args)
+    
     elif node_type == ast.StringLiteral:
-        node = cast(ast.StringLiteral, node)
 
+        node = cast(ast.StringLiteral, node)
         return String(node.value)
+    
     return None
 
 
