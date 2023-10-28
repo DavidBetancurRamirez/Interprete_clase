@@ -1,32 +1,33 @@
 from enum import IntEnum
 from typing import (
-    Optional,
-    List,
     Callable,
-    Dict
+    Dict,
+    List,
+    Optional,
 )
 from lpp.ast import (
     Block,
     Boolean,
     Call,
-    Identifier,
     Expression,
     ExpressionStatement,
     Function,
+    Identifier,
     If,
     Infix,
     Integer,
     LetStatement,
     Prefix,
     Program,
-    ReturnStatements,
+    ReturnStatement,
     Statement,
-)
-from lpp.tokens import(
-    Token,
-    TokenType
+    StringLiteral
 )
 from lpp.lexer import Lexer
+from lpp.tokens import (
+    Token,
+    TokenType,
+)
 
 
 PrefixParseFn = Callable[[], Optional[Expression]]
@@ -47,16 +48,16 @@ class Precedence(IntEnum):
 
 PRECEDENCES: Dict[TokenType, Precedence] = {
     TokenType.EQ: Precedence.EQUALS,
-    TokenType.DIF: Precedence.EQUALS,
-    TokenType.LT: Precedence.LESSGREATER,
-    TokenType.LTE: Precedence.LESSGREATER,
+    TokenType.DIVISION: Precedence.PRODUCT,
     TokenType.GT: Precedence.LESSGREATER,
     TokenType.GTE: Precedence.LESSGREATER,
+    TokenType.LT: Precedence.LESSGREATER,
+    TokenType.LTE: Precedence.LESSGREATER,
+    TokenType.LPAREN: Precedence.CALL,
     TokenType.PLUS: Precedence.SUM,
     TokenType.MINUS: Precedence.SUM,
-    TokenType.DIVISION: Precedence.PRODUCT,
     TokenType.MULTIPLICATION: Precedence.PRODUCT,
-    TokenType.LPAREN: Precedence.CALL,
+    TokenType.NOT_EQ: Precedence.EQUALS,
 }
 
 
@@ -114,7 +115,7 @@ class Parser:
 
     def _expected_token_error(self, token_type: TokenType) -> None:
         assert self._peek_token is not None
-        error = f'Se esperaba que el siguiente tokne fuera {token_type} ' + \
+        error = f'Se esperaba que el siguiente token fuera {token_type} ' + \
             f'pero se obtuvo {self._peek_token.token_type}'
 
         self._errors.append(error)
@@ -188,7 +189,7 @@ class Parser:
         left_expression = prefix_parse_fn()
 
         assert self._peek_token is not None
-        while self._peek_token.token_type != TokenType.SEMICOLON and \
+        while not self._peek_token.token_type == TokenType.SEMICOLON and \
                 precedence < self._peek_precedence():
             try:
                 infix_parse_fn = self._infix_parse_fns[self._peek_token.token_type]
@@ -367,9 +368,9 @@ class Parser:
 
         return prefix_expression
 
-    def _parse_return_statement(self) -> Optional[ReturnStatements]:
+    def _parse_return_statement(self) -> Optional[ReturnStatement]:
         assert self._current_token is not None
-        return_statement = ReturnStatements(token=self._current_token)
+        return_statement = ReturnStatement(token=self._current_token)
 
         self._advance_tokens()
 
@@ -404,7 +405,7 @@ class Parser:
             TokenType.DIVISION: self._parse_infix_expression,
             TokenType.MULTIPLICATION: self._parse_infix_expression,
             TokenType.EQ: self._parse_infix_expression,
-            TokenType.DIF: self._parse_infix_expression,
+            TokenType.NOT_EQ: self._parse_infix_expression,
             TokenType.LT: self._parse_infix_expression,
             TokenType.LTE: self._parse_infix_expression,
             TokenType.GT: self._parse_infix_expression,
@@ -423,5 +424,10 @@ class Parser:
             TokenType.MINUS: self._parse_prefix_expression,
             TokenType.NEGATION: self._parse_prefix_expression,
             TokenType.TRUE: self._parse_boolean,
+            TokenType.STRING: self._parse_string_literal,
         }
     
+    def _parse_string_literal(self) -> Expression:
+        assert self._current_token is not None
+        return StringLiteral(token=self._current_token,
+                             value=self._current_token.literal)

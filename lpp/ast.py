@@ -1,11 +1,12 @@
-from abc import(
+from abc import (
     ABC,
-    abstractmethod
+    abstractmethod,
 )
 from typing import (
     List,
-    Optional
+    Optional,
 )
+
 from lpp.tokens import Token
 
 
@@ -83,7 +84,7 @@ class LetStatement(Statement):
         return f'{self.token_literal()} {str(self.name)} = {str(self.value)};'
 
 
-class ReturnStatements(Statement):
+class ReturnStatement(Statement):
 
     def __init__(self,
                  token: Token,
@@ -174,7 +175,6 @@ class Block(Statement):
 
         return ''.join(out)
 
-
 class If(Expression):
 
     def __init__(self,
@@ -231,3 +231,13 @@ class Call(Expression):
 
         return f'{str(self.function)}({args})'
     
+class StringLiteral(Expression):
+
+    def __init__(self,
+                 token: Token,
+                 value: str) -> None:
+        super().__init__(token)
+        self.value = value
+
+    def __str__(self) -> str:
+        return super().__str__()
