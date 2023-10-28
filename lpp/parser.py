@@ -229,6 +229,11 @@ class Parser:
         assert self._current_token is not None
         function = Function(token=self._current_token)
 
+        if not self._expected_token(TokenType.IDENT):
+            return None
+
+        function.name = self._parse_identifier() 
+
         if not self._expected_token(TokenType.LPAREN):
             return None
 

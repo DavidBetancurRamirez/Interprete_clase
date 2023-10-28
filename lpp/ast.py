@@ -6,9 +6,7 @@ from typing import (
     List,
     Optional,
 )
-
 from lpp.tokens import Token
-
 
 class ASTNode(ABC):
 
@@ -201,10 +199,12 @@ class Function(Expression):
     def __init__(self,
                  token: Token,
                  parameters: List[Identifier] = [],
-                 body: Optional[Block] = None) -> None:
+                 body: Optional[Block] = None,
+                 name: Optional[Identifier] = None) -> None:
         super().__init__(token)
         self.parameters = parameters
         self.body = body
+        self.name = name
 
     def __str__(self) -> str:
         param_list: List[str] = [str(parameter) for parameter in self.parameters]

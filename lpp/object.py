@@ -122,10 +122,12 @@ class Function(Object):
     def __init__(self,
                  parameters: List[Identifier],
                  body: Block,
-                 env: Environment) -> None:
+                 env: Environment,
+                 name: Identifier) -> None:
         self.parameters = parameters
         self.body = body
         self.env = env
+        self.name = name
 
     def type(self) -> ObjectType:
         return ObjectType.FUNCTION
@@ -133,7 +135,7 @@ class Function(Object):
     def inspect(self) -> str:
         params: str = ', '.join([str(param) for param in self.parameters])
 
-        return 'procedimiento({}) {{\n{}\n}}'.format(params, str(self.body))
+        return 'procedimiento {}({}) {{\n{}\n}}'.format(str(self.name), params, str(self.body))
     
 class String(Object):
 

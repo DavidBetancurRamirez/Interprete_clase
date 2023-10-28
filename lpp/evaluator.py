@@ -119,7 +119,11 @@ def evaluate(node: ast.ASTNode, env: Environment) -> Optional[Object]:
         node = cast(ast.Function, node)
 
         assert node.body is not None
-        return Function(node.parameters, node.body, env)
+
+        assert node.name is not None
+        env[node.name.value] = node
+
+        return Function(node.parameters, node.body, env, node.name)
     
     elif node_type == ast.Call:
 
