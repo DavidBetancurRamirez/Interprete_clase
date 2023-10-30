@@ -6,7 +6,6 @@ from enum import (
     auto,
     Enum,
 )
- 
 from typing import (
     Dict,
     List,

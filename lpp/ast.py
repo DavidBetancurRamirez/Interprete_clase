@@ -8,6 +8,7 @@ from typing import (
 )
 from lpp.tokens import Token
 
+
 class ASTNode(ABC):
 
     @abstractmethod
